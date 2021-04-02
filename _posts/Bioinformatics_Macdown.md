@@ -118,8 +118,8 @@ $ cd usernmae (changes directory to work in your new one)
 	* Login to bluewaves
 	* cd into the directory where the file is
 	* To untar the file:
-		* ` $ tar -xzf Coral_Holobiont_Data/Mcapitata_holotranscriptome_data_v1.tar.gz
-		* ` $ tar -xzf Coral_Holobiont_Data/Pacuta_holotranscriptome_data_v!.tar.gz
+		* ` $ tar -xzf Coral_Holobiont_Data/Mcapitata_holotranscriptome_data_v1.tar.gz`
+		* ` $ tar -xzf Coral_Holobiont_Data/Pacuta_holotranscriptome_data_v!.tar.gz`
 
 # Testing Scripts in R with First 10,000 Counts
 Note: In its entirety, the counts file is too big to manipulate locally, so we had to run it on bluewaves. We want to subset the counts file so that we can interactively write and test our script in RStudio (locally) before running it on the full counts file in bluewaves.
@@ -162,47 +162,47 @@ Here is [My script for *P. acuta* testing the script with the first 10,000 count
 	* Uploading data for *P. acuta*
 	
 	```
-		#Importing Data
-		Master_Fragment2 <- read.csv("Master_Fragment.csv") 
-	#Importing data and telling it to set gene IDs as a row name instead of column
-	First_10000_Counts2 <- read.delim2("Coral_Holobiont_Data/Pacuta_holotranscriptome_data_v1/First_10000_Counts_Pacuta",row.names = "Name")
-	#Levels for Timepoint
-	factor(Master_Fragment2$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
-	#Replacing Column Names
-	New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9][0-9]_","X",colnames(First_10000_Counts2))
-	New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9]_","X",New.cols)
-	#Adding them back
-	colnames(First_10000_Counts2) <- New.cols
+#Importing Data
+Master_Fragment2 <- read.csv("Master_Fragment.csv") 
+#Importing data and telling it to set gene IDs as a row name instead of column
+First_10000_Counts2 <- read.delim2("Coral_Holobiont_Data/Pacuta_holotranscriptome_data_v1/First_10000_Counts_Pacuta",row.names = "Name")
+#Levels for Timepoint
+factor(Master_Fragment2$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
+#Replacing Column Names
+New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9][0-9]_","X",colnames(First_10000_Counts2))
+New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9]_","X",New.cols)
+#Adding them back
+colnames(First_10000_Counts2) <- New.cols
 	```
+	
 	* At this point I removed the part of the column name so it was only Fragment ID
 		* To do this, I used the gsub() function in R, which removes patterns or replaces patterns with other patterns
 	* Adding row names for *M. capitata* 
 
 	```
-	#Add Row Names
-	New.rows <- paste(sep = "","X",Master_Fragment$Plug_ID)
-	rownames(Master_Fragment) <- New.rows
-	
-	#Removing NA rows for Master Fragment Timepoint because they correspond to bleaching samples
-	Master_Fragment <- Master_Fragment[!is.na(Master_Fragment$Timepoint), ] 
-	
-	#Levels for Timepoint
-	factor(Master_Fragment$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
-	
-	#Rename Dataset as M.cap and put rows in correct order
-	Mcap.Fragment <- Master_Fragment[colnames(First_10000_Counts),]
+#Add Row Names
+New.rows <- paste(sep = "","X",Master_Fragment$Plug_ID)
+rownames(Master_Fragment) <- New.rows
+#Removing NA rows for Master Fragment Timepoint because they correspond to bleaching samples
+Master_Fragment <- Master_Fragment[!is.na(Master_Fragment$Timepoint), ] 
+#Levels for Timepoint
+factor(Master_Fragment$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
+#Rename Dataset as M.cap and put rows in correct order
+Mcap.Fragment <- Master_Fragment[colnames(First_10000_Counts),]
 ```
+	
 	* Adding row names for *P. acuta*
 
-	```
-	#Add Row Names
-	New.rows <- paste(sep = "","X",Master_Fragment2$Plug_ID)
-	rownames(Master_Fragment2) <- New.rows
+```
+#Add Row Names
+New.rows <- paste(sep = "","X",Master_Fragment2$Plug_ID)
+rownames(Master_Fragment2) <- New.rows
 	
-	#Rename Dataset as Pacuta and put rows in correct order
-	Pacuta.Fragment <- Master_Fragment2[colnames(First_10000_Counts2),]
-	```
+#Rename Dataset as Pacuta and put rows in correct order
+Pacuta.Fragment <- Master_Fragment2[colnames(First_10000_Counts2),]
+```
 	
+
 #Constructing DESeq2 Dataset
 Objective: The purpose of DESeq2 is to take the raw counts from RNAseq and normalize them for visualization. 
 
@@ -210,16 +210,12 @@ Objective: The purpose of DESeq2 is to take the raw counts from RNAseq and norma
 
 ```
 Mcap.Fragment$Treatment <- factor(Mcap.Fragment$Treatment, levels = c("ATAC","ATHC","HTAC","HTHC"))
-
 #Check Levels
 str(Mcap.Fragment$Treatment) 
-
 #Saving First_10000_Counts with gene names as a different dataset
 First_10000_Counts_gene <- rownames(First_10000_Counts)
-
 #Converting Decimals into Integars
 First_10000_Counts <- data.frame(lapply(First_10000_Counts, as.numeric), stringsAsFactors = FALSE)
-
 #Set Design of DESeq2 Data
 mdds <- DESeqDataSetFromMatrix(countData = round(First_10000_Counts),colData = Mcap.Fragment,design = ~Treatment)
 ```
@@ -228,16 +224,12 @@ mdds <- DESeqDataSetFromMatrix(countData = round(First_10000_Counts),colData = M
 
 ```
 Pacuta.Fragment$Treatment <- factor(Pacuta.Fragment$Treatment, levels = c("ATAC","ATHC","HTAC","HTHC"))
-
 #Check Levels
 str(Pacuta.Fragment$Treatment) 
-
 #Saving First_10000_Counts with gene names as a different dataset
 First_10000_Counts_gene_p <- rownames(First_10000_Counts2)
-
 #Converting Decimals into Integars
 First_10000_Counts2 <- data.frame(lapply(First_10000_Counts2, as.numeric), stringsAsFactors = FALSE)
-
 #Set Design of DESeq2 Data
 pdds <- DESeqDataSetFromMatrix(countData = round(First_10000_Counts2),colData = Pacuta.Fragment,design = ~Treatment)
 ```
@@ -249,26 +241,23 @@ pdds <- DESeqDataSetFromMatrix(countData = round(First_10000_Counts2),colData = 
 ```
 SF.mdds <- estimateSizeFactors(mdds)
 print(sizeFactors(SF.mdds)) #Check that values are less than 4
-
 #Variance Stabilizing Transformation
 gvst_mdds<- vst(mdds, blind=TRUE)
 vst_transformed_counts <- data.frame(assay(gvst_mdds))
 head(assay(gvst_mdds), 3)
-
 #Adding column to vst_transformed_counts
 rownames(vst_transformed_counts) <- First_10000_Counts_gene
 ```
+
 * *P. acuta* test:
 
 ```
 SF.pdds <- estimateSizeFactors(pdds)
 print(sizeFactors(SF.pdds)) #Check that values are less than 4
-
 #Variance Stabilizing Transformation
 gvst_pdds<- vst(pdds, blind=TRUE)
 P_vst_transformed_counts <- data.frame(assay(gvst_pdds))
 head(assay(gvst_pdds), 3)
-
 #Adding column to vst_transformed_counts
 rownames(P_vst_transformed_counts) <- First_10000_Counts_gene_p
 ```
