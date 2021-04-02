@@ -158,7 +158,7 @@ Here is [My script for *P. acuta* testing the script with the first 10,000 count
 	First_10000_Counts <- read.delim2("Coral_Holobiont_Data/Mcapitata_holotranscriptome_data_v1/First_10000_Counts",row.names = "Name")
 	```
 	* We use the function read_delim2() because it the file is in a tab-deliminaed format
-		* Here, we ran into a problem - the gene names in the read_count file were different then the gene names in the BLAST file we generated. Therefore, we needed to run BLAST again to generate the correct gene names. The file above is the file we ended up working.
+		* Here, we ran into a problem - the gene names in the read_count file were different then the gene names in the BLAST file we generated. Therefore, we needed to run BLAST again to generate the correct gene names. The file above is the file we ended up using.
 	* Uploading data for *P. acuta*
 	
 	```
@@ -180,16 +180,16 @@ Here is [My script for *P. acuta* testing the script with the first 10,000 count
 	* Adding row names for *M. capitata* 
 
 	```
-#Add Row Names
-New.rows <- paste(sep = "","X",Master_Fragment$Plug_ID)
-rownames(Master_Fragment) <- New.rows
-#Removing NA rows for Master Fragment Timepoint because they correspond to bleaching samples
-Master_Fragment <- Master_Fragment[!is.na(Master_Fragment$Timepoint), ] 
-#Levels for Timepoint
-factor(Master_Fragment$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
-#Rename Dataset as M.cap and put rows in correct order
-Mcap.Fragment <- Master_Fragment[colnames(First_10000_Counts),]
-```
+	#Add Row Names
+	New.rows <- paste(sep = "","X",Master_Fragment$Plug_ID)
+	rownames(Master_Fragment) <- New.rows
+	#Removing NA rows for Master Fragment Timepoint because they correspond to 	bleaching samples
+	Master_Fragment <- Master_Fragment[!is.na(Master_Fragment$Timepoint), ] 
+	#Levels for Timepoint
+	factor(Master_Fragment$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
+	#Rename Dataset as M.cap and put rows in correct order
+	Mcap.Fragment <- Master_Fragment[colnames(First_10000_Counts),]
+	```
 	
 	* Adding row names for *P. acuta*
 
