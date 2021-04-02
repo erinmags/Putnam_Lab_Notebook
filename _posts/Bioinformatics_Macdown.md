@@ -162,17 +162,17 @@ Here is [My script for *P. acuta* testing the script with the first 10,000 count
 	* Uploading data for *P. acuta*
 	
 	```
-#Importing Data
-Master_Fragment2 <- read.csv("Master_Fragment.csv") 
-#Importing data and telling it to set gene IDs as a row name instead of column
-First_10000_Counts2 <- read.delim2("Coral_Holobiont_Data/Pacuta_holotranscriptome_data_v1/First_10000_Counts_Pacuta",row.names = "Name")
-#Levels for Timepoint
-factor(Master_Fragment2$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
-#Replacing Column Names
-New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9][0-9]_","X",colnames(First_10000_Counts2))
-New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9]_","X",New.cols)
-#Adding them back
-colnames(First_10000_Counts2) <- New.cols
+	#Importing Data
+	Master_Fragment2 <- read.csv("Master_Fragment.csv") 
+	#Importing data and telling it to set gene IDs as a row name instead of column
+	First_10000_Counts2 <- read.delim2("Coral_Holobiont_Data/	Pacuta_holotranscriptome_data_v1/First_10000_Counts_Pacuta",row.names = "Name")
+	#Levels for Timepoint
+	factor(Master_Fragment2$Timepoint,levels=c("0 hour","1 hour","6 hour","12 hour","Day 1","30 hour","Day 2","1 week","2 week","4 week","6 week","8 week","12 week","16 week"))
+	#Replacing Column Names
+	New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9][0-9]_","X",colnames(First_10000_Counts2))
+	New.cols <- gsub("Pacuta_[A-Z][A-Z][A-Z][A-Z]_TP[0-9]_","X",New.cols)
+	#Adding them back
+	colnames(First_10000_Counts2) <- New.cols
 	```
 	
 	* At this point I removed the part of the column name so it was only Fragment ID
